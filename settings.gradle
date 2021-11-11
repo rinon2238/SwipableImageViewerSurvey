@@ -7,5 +7,5 @@ dependencyResolutionManagement {
         maven { url "https://www.jitpack.io" }
     }
 }
-rootProject.name = "Image Scaling Test Stable"
+rootProject.name = "Scalable Image Viewer Survey"
 include ':app'
