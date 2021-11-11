@@ -13,7 +13,7 @@ class PhotoViewDemoActivity: AppCompatActivity() {
         private const val ORIENTATION_KEY = "orientation_key"
 
         fun createIntent(context: Context, doVerticalization: Boolean): Intent {
-            return Intent(context, this::class.java).apply {
+            return Intent(context, PhotoViewDemoActivity::class.java).apply {
                 putExtra(ORIENTATION_KEY, doVerticalization)
             }
         }
