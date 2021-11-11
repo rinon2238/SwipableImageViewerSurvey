@@ -7,7 +7,7 @@ android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "jp.studist.rinon2238.imagescalingteststable"
+        applicationId 'jp.studist.rinon2238.swipableimageviewersurvey'
         minSdk 23
         targetSdk 31
         versionCode 1

@@ -1,11 +1,11 @@
-package jp.studist.rinon2238.imagescalingteststable.page
+package jp.studist.rinon2238.swipableimageviewersurvey.page
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import jp.studist.rinon2238.imagescalingteststable.DemoType
+import jp.studist.rinon2238.swipableimageviewersurvey.DemoType
 
 class DemoImageFragment: Fragment() {
 

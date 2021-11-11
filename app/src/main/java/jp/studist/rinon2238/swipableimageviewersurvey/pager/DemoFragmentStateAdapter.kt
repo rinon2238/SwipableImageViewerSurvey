@@ -1,10 +1,10 @@
-package jp.studist.rinon2238.imagescalingteststable.pager
+package jp.studist.rinon2238.swipableimageviewersurvey.pager
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import jp.studist.rinon2238.imagescalingteststable.DemoType
-import jp.studist.rinon2238.imagescalingteststable.page.DemoImageFragment
+import jp.studist.rinon2238.swipableimageviewersurvey.DemoType
+import jp.studist.rinon2238.swipableimageviewersurvey.page.DemoImageFragment
 
 class DemoFragmentStateAdapter(
     parent: FragmentActivity,

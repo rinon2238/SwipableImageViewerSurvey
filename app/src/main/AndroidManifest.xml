@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="jp.studist.rinon2238.imagescalingteststable">
+    package="jp.studist.rinon2238.swipableimageviewersurvey">
 
     <application
         android:allowBackup="true"
@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ImageScalingTestStable">
         <activity
-            android:name=".MainActivity"
+            android:name="jp.studist.rinon2238.swipableimageviewersurvey.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,13 +19,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".PhotoViewDemoActivity"
+        <activity android:name="jp.studist.rinon2238.swipableimageviewersurvey.PhotoViewDemoActivity"
             android:exported="false"/>
 
-        <activity android:name=".ZoomageViewDemoActivity"
+        <activity android:name="jp.studist.rinon2238.swipableimageviewersurvey.ZoomageViewDemoActivity"
             android:exported="false"/>
 
-        <activity android:name=".DIYReferenceOfficialActivity"
+        <activity android:name="jp.studist.rinon2238.swipableimageviewersurvey.DIYReferenceOfficialActivity"
             android:exported="false" />
     </application>
 

@@ -1,4 +1,4 @@
-package jp.studist.rinon2238.imagescalingteststable
+package jp.studist.rinon2238.swipableimageviewersurvey
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

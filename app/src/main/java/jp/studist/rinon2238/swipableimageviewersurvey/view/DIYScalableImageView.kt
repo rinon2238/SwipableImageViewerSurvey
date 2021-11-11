@@ -1,4 +1,4 @@
-package jp.studist.rinon2238.imagescalingteststable.view
+package jp.studist.rinon2238.swipableimageviewersurvey.view
 
 import android.content.Context
 import android.graphics.*
@@ -6,7 +6,6 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import androidx.appcompat.widget.AppCompatImageView
-import jp.studist.rinon2238.imagescalingteststable.R
 
 class DIYScalableImageView(context: Context, attr: AttributeSet) : AppCompatImageView(context, attr) {
 
