@@ -9,9 +9,12 @@ import androidx.appcompat.widget.AppCompatImageView
 
 class DIYScalableImageView(context: Context, attr: AttributeSet) : AppCompatImageView(context, attr) {
 
-    private val fingersPoint = PointF()
+    // 最大２点の指の座標
+    private val fingersPoint = listOf(PointF(), PointF())
 
+    // 画像の大きさと表示位置
     private val currentImageRect = RectF()
+    // 画像の中心座標
     private val currentImageFocus = PointF()
 
     private var scaleFactor = 1f
