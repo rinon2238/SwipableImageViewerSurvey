@@ -1,13 +1,16 @@
 package jp.studist.rinon2238.swipableimageviewersurvey.page
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ScrollView
 import androidx.fragment.app.Fragment
 import com.github.chrisbanes.photoview.PhotoView
 import jp.studist.rinon2238.swipableimageviewersurvey.DemoType
 import jp.studist.rinon2238.swipableimageviewersurvey.R
+import kotlin.math.roundToInt
 
 class DemoImageFragment: Fragment() {
 
@@ -34,17 +37,42 @@ class DemoImageFragment: Fragment() {
                 container,
                 false
             ).also {
+                val description = it.findViewById<ScrollView>(R.id.photoview_exam_description)
                 it.findViewById<PhotoView>(R.id.photoview_exam).apply {
                     attacher.apply {
                         this.maximumScale = 6.0f
-                        this.minimumScale = 0.5f
-                        this.setAllowParentInterceptOnEdge(false)
+                    }
+
+                    this.setOnScaleChangeListener { _, _, _ ->
+                        Log.d("DemoImageFragment", "scale: $scale")
+                        if (approximateMinimumScaleIfNeeded(scale) > minimumScale) {
+                            // TextView消す
+                            description?.visibility = View.GONE
+                        } else {
+                            // TextView復活
+                            description?.visibility = View.VISIBLE
+                        }
                     }
                 }
             }
         }
 
         return null
+    }
+
+    private fun approximateMinimumScaleIfNeeded(input: Float): Float {
+        return roundFloat(input).let { output ->
+            if (output <= 1.0f) {
+                output
+            } else {
+                input
+            }
+        }
+    }
+
+    // 有効桁数 1桁のfloatに直す
+    private fun roundFloat(input: Float): Float {
+        return (input * 10.0f).roundToInt() / 10.0f
     }
 
 }
