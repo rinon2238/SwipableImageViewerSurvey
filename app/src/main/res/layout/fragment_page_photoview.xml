@@ -6,7 +6,7 @@
     android:background="@color/cardview_dark_background">
 
     <com.github.chrisbanes.photoview.PhotoView
-        android:id="@+id/zoomage_exam"
+        android:id="@+id/photoview_exam"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:src="@drawable/puipui_test"
