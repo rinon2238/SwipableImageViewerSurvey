@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import com.github.chrisbanes.photoview.PhotoView
 import jp.studist.rinon2238.swipableimageviewersurvey.DemoType
 import jp.studist.rinon2238.swipableimageviewersurvey.R
-import kotlin.math.roundToInt
+import kotlin.math.floor
 
 class DemoImageFragment: Fragment() {
 
@@ -61,8 +61,8 @@ class DemoImageFragment: Fragment() {
     }
 
     private fun approximateMinimumScaleIfNeeded(input: Float): Float {
-        return roundFloat(input).let { output ->
-            if (output <= 1.0f) {
+        return floorFloat(input).let { output ->
+            if (output <= 1.00f) {
                 output
             } else {
                 input
@@ -70,9 +70,9 @@ class DemoImageFragment: Fragment() {
         }
     }
 
-    // 有効桁数 1桁のfloatに直す
-    private fun roundFloat(input: Float): Float {
-        return (input * 10.0f).roundToInt() / 10.0f
+    // 有効桁数 1桁のfloatに切り捨てで直す
+    private fun floorFloat(input: Float): Float {
+        return floor(input * 10.0f) / 10.0f
     }
 
 }
