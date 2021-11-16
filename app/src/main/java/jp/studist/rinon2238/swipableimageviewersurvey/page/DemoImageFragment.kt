@@ -45,7 +45,7 @@ class DemoImageFragment: Fragment() {
 
                     this.setOnScaleChangeListener { _, _, _ ->
                         Log.d("DemoImageFragment", "scale: $scale")
-                        if (approximateMinimumScaleIfNeeded(scale) > minimumScale) {
+                        if (floorFloat(scale) > minimumScale) {
                             // TextView消す
                             description?.visibility = View.GONE
                         } else {
@@ -58,16 +58,6 @@ class DemoImageFragment: Fragment() {
         }
 
         return null
-    }
-
-    private fun approximateMinimumScaleIfNeeded(input: Float): Float {
-        return floorFloat(input).let { output ->
-            if (output <= 1.00f) {
-                output
-            } else {
-                input
-            }
-        }
     }
 
     // 有効桁数 1桁のfloatに切り捨てで直す
