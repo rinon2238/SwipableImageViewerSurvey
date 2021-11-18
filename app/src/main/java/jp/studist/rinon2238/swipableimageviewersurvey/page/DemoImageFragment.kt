@@ -45,19 +45,27 @@ class DemoImageFragment: Fragment() {
 
                     this.setOnScaleChangeListener { _, _, _ ->
                         Log.d("DemoImageFragment", "scale: $scale")
-                        if (floorFloat(scale) > minimumScale) {
-                            // TextView消す
-                            description?.visibility = View.GONE
-                        } else {
-                            // TextView復活
-                            description?.visibility = View.VISIBLE
-                        }
+                        switchDescriptionVisibility(description,floorFloat(scale) > minimumScale)
+                    }
+
+                    this.setOnViewTapListener { _, _, _ ->
+                        switchDescriptionVisibility(description,description.visibility == View.VISIBLE)
                     }
                 }
             }
         }
 
         return null
+    }
+
+    private fun switchDescriptionVisibility(description: View?, condition: Boolean) {
+        if (condition) {
+            // TextView消す
+            description?.visibility = View.GONE
+        } else {
+            // TextView復活
+            description?.visibility = View.VISIBLE
+        }
     }
 
     // 有効桁数 1桁のfloatに切り捨てで直す
