@@ -3,11 +3,14 @@ package jp.studist.rinon2238.swipableimageviewersurvey
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import jp.studist.rinon2238.swipableimageviewersurvey.pager.DemoFragmentStateAdapter
 
 class PhotoViewDemoActivity: AppCompatActivity() {
+
+    private lateinit var viewPager2: ViewPager2
 
     companion object {
         private const val ORIENTATION_KEY = "orientation_key"
@@ -23,7 +26,7 @@ class PhotoViewDemoActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_demo_container)
 
-        findViewById<ViewPager2>(R.id.view_pager).apply {
+        viewPager2 = findViewById<ViewPager2>(R.id.view_pager).apply {
             adapter = DemoFragmentStateAdapter(
                 this@PhotoViewDemoActivity,
                 DemoType.PHOTO_VIEW
@@ -33,6 +36,18 @@ class PhotoViewDemoActivity: AppCompatActivity() {
                 ViewPager2.ORIENTATION_VERTICAL
             } else {
                 ViewPager2.ORIENTATION_HORIZONTAL
+            }
+        }
+
+        findViewById<ImageView>(R.id.arrow_back).apply {
+            setOnClickListener {
+                viewPager2.currentItem -= 1
+            }
+        }
+
+        findViewById<ImageView>(R.id.arrow_forward).apply {
+            setOnClickListener {
+                viewPager2.currentItem += 1
             }
         }
     }
