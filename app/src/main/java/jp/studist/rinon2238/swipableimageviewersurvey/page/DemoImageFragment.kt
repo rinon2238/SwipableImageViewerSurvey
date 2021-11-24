@@ -1,11 +1,13 @@
 package jp.studist.rinon2238.swipableimageviewersurvey.page
 
+import android.animation.Animator
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.view.animation.DecelerateInterpolator
+import android.widget.FrameLayout
 import android.widget.ScrollView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.github.chrisbanes.photoview.PhotoView
 import jp.studist.rinon2238.swipableimageviewersurvey.DemoType
@@ -32,25 +34,49 @@ class DemoImageFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         arguments?.let { bundle ->
+            val resId = bundle.getInt(demoTypeKey)
             return inflater.inflate(
-                bundle.getInt(demoTypeKey),
+                resId,
                 container,
                 false
             ).also {
-                val description = it.findViewById<ScrollView>(R.id.photoview_exam_description)
+                // 面倒なので一旦雑に落ちないようにする
+                if (resId != R.layout.fragment_page_photoview) {
+                    return@also
+                }
+
+                val container = it.findViewById<ConstraintLayout>(R.id.container)
+                val scrollView = it.findViewById<ScrollView>(R.id.photoview_exam_description)
+                it.findViewById<FrameLayout>(R.id.photoview_scroll_contents_wrapper).apply {
+                    setOnClickListener {
+                        switchDescriptionVisibility(scrollView, this.visibility == View.VISIBLE)
+                    }
+                }
+
                 it.findViewById<PhotoView>(R.id.photoview_exam).apply {
                     attacher.apply {
-                        this.maximumScale = 6.0f
+                        maximumScale = 6.0f
                     }
 
-                    this.setOnScaleChangeListener { _, _, _ ->
+                    setOnScaleChangeListener { _, _, _ ->
                         Log.d("DemoImageFragment", "scale: $scale")
-                        switchDescriptionVisibility(description,floorFloat(scale) > minimumScale)
+                        switchDescriptionVisibility(scrollView,floorFloat(scale) > minimumScale)
                     }
 
-                    this.setOnViewTapListener { _, _, _ ->
-                        switchDescriptionVisibility(description,description.visibility == View.VISIBLE)
+                    setOnClickListener {
+                        switchDescriptionVisibility(scrollView,scrollView.visibility == View.VISIBLE)
                     }
+
+//                    setOnViewDragListener { _, dy ->
+//                        container.y += dy
+//                    }
+//
+//                    setOnSingleFlingListener { _, _, _, velocityY ->
+//                        if (velocityY > 8_000) {
+//                            dismissOrRestore(container)
+//                        }
+//                        true
+//                    }
                 }
             }
         }
@@ -58,8 +84,55 @@ class DemoImageFragment: Fragment() {
         return null
     }
 
-    private fun switchDescriptionVisibility(description: View?, condition: Boolean) {
-        if (condition) {
+    private fun dismissOrRestore(view: View) {
+        // y方向のスワイプ量がスワイプ対象のビューの高さ1/3を超えたら画面を閉じる
+        if (view.y < view.height / 3) {
+            restoreViewTransform(view)
+        } else {
+            dismissMe()
+        }
+    }
+
+    private fun dismissMe() {
+        parentFragmentManager.run {
+            if (backStackEntryCount > 0) {
+                popBackStack()
+            } else {
+                beginTransaction().remove(this@DemoImageFragment).commitNow()
+            }
+        }
+    }
+
+    private fun restoreViewTransform(view: View) {
+        view.run {
+            animate()
+                .setDuration(300)
+                .setInterpolator(DecelerateInterpolator())
+                .translationY(view.top.toFloat())
+                .setUpdateListener {
+                }
+                .setListener(object : Animator.AnimatorListener {
+                    override fun onAnimationStart(p0: Animator?) {
+                        // no op
+                    }
+
+                    override fun onAnimationEnd(p0: Animator?) {
+                        // no op
+                    }
+
+                    override fun onAnimationCancel(p0: Animator?) {
+                        // no op
+                    }
+
+                    override fun onAnimationRepeat(p0: Animator?) {
+                        // no op
+                    }
+                })
+        }
+    }
+
+    private fun switchDescriptionVisibility(description: View?, shouldGoneAt: Boolean) {
+        if (shouldGoneAt) {
             // TextView消す
             description?.visibility = View.GONE
         } else {
