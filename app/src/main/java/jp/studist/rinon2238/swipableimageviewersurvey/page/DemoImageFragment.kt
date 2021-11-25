@@ -8,6 +8,7 @@ import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
 import android.widget.ScrollView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.GestureDetectorCompat
 import androidx.fragment.app.Fragment
 import com.github.chrisbanes.photoview.PhotoView
 import jp.studist.rinon2238.swipableimageviewersurvey.DemoType
@@ -53,30 +54,54 @@ class DemoImageFragment: Fragment() {
                     }
                 }
 
-                it.findViewById<PhotoView>(R.id.photoview_exam).apply {
-                    attacher.apply {
-                        maximumScale = 6.0f
-                    }
+                val photoview = it.findViewById<PhotoView>(R.id.photoview_exam).apply {
+                    maximumScale = 6.0f
+                    isZoomable = false
 
-                    setOnScaleChangeListener { _, _, _ ->
+                    setOnScaleChangeListener { scaleFactor, _, _ ->
                         Log.d("DemoImageFragment", "scale: $scale")
                         switchDescriptionVisibility(scrollView,floorFloat(scale) > minimumScale)
+
+                        if (scale < 1f) {
+                            isZoomable = false
+                        }
                     }
 
                     setOnClickListener {
                         switchDescriptionVisibility(scrollView,scrollView.visibility == View.VISIBLE)
                     }
+                }
 
-//                    setOnViewDragListener { _, dy ->
-//                        container.y += dy
-//                    }
-//
-//                    setOnSingleFlingListener { _, _, _, velocityY ->
-//                        if (velocityY > 8_000) {
-//                            dismissOrRestore(container)
-//                        }
-//                        true
-//                    }
+                val gestureListener = object : GestureDetector.SimpleOnGestureListener() {
+                    override fun onScroll(e1: MotionEvent?, e2: MotionEvent?, distanceX: Float, distanceY: Float): Boolean {
+                        container.y -= distanceY
+                        return super.onScroll(e1, e2, distanceX, distanceY)
+                    }
+
+                    override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
+                        // 速度が一定以上だったら画面を閉じる
+                        if (velocityY > 8_000) {
+                            dismissOrRestore(container)
+                        }
+                        return super.onFling(e1, e2, velocityX, velocityY)
+                    }
+                }
+
+                val gestureDetector = GestureDetectorCompat(requireContext(), gestureListener)
+                container.setOnTouchListener { _, event ->
+                    Log.d("DemoImageFragment", "event.pointerCount = ${event.pointerCount}")
+                    when (event.actionMasked) {
+                        MotionEvent.ACTION_UP -> {
+                            dismissOrRestore(container)
+                        }
+
+                        MotionEvent.ACTION_POINTER_DOWN -> {
+                            photoview.isZoomable = true
+                        }
+                    }
+
+                    gestureDetector.onTouchEvent(event)
+                    true
                 }
             }
         }
@@ -86,20 +111,11 @@ class DemoImageFragment: Fragment() {
 
     private fun dismissOrRestore(view: View) {
         // y方向のスワイプ量がスワイプ対象のビューの高さ1/3を超えたら画面を閉じる
-        if (view.y < view.height / 3) {
+        if ((view.y.toInt() != view.height) && (view.y < view.height / 3)) {
             restoreViewTransform(view)
         } else {
-            dismissMe()
-        }
-    }
-
-    private fun dismissMe() {
-        parentFragmentManager.run {
-            if (backStackEntryCount > 0) {
-                popBackStack()
-            } else {
-                beginTransaction().remove(this@DemoImageFragment).commitNow()
-            }
+            // fire dismiss event.
+            restoreViewTransform(view)
         }
     }
 
